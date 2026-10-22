@@ -1,6 +1,6 @@
 # Ilma & Ruy · Punta Cana 2027
 
-Site do casamento: **https://site-casamento.vercel.app** (endereço confirmado na primeira publicação na Vercel)
+Site do casamento: **https://casamento-ilma-ruy.vercel.app** (projeto na Vercel: `fract-ia-s-projects/site-casamento`)
 
 Site estático (Astro), uma página só, com menu fixo. Fica fora dos buscadores
 (`noindex, nofollow` na página, no cabeçalho `X-Robots-Tag` da Vercel e no `robots.txt`), mas qualquer pessoa com o link abre.

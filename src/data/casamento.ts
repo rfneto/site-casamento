@@ -321,7 +321,7 @@ export const casamento = {
     titulo: 'Ilma & Ruy · Punta Cana 2027',
     descricao: 'Vamos casar pé na areia em Punta Cana, em maio de 2027. Data, programação e o checklist da viagem.',
     // Endereço público do site (usado no link da agenda e no Open Graph).
-    url: 'https://site-casamento.vercel.app/',
+    url: 'https://casamento-ilma-ruy.vercel.app/',
   },
 };
 

@@ -4,7 +4,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://site-casamento.vercel.app',
+  site: 'https://casamento-ilma-ruy.vercel.app',
   trailingSlash: 'ignore',
   devToolbar: { enabled: false },
 });

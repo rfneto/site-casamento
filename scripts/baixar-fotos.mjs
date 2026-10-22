@@ -5,6 +5,11 @@
 // Também grava o crédito de cada foto baixada em src/data/creditos-fotos.json
 // (o site mostra esses créditos no rodapé).
 //
+// Precisa de uma chave gratuita do Unsplash (https://unsplash.com/developers →
+// New Application → "Access Key"), guardada no GitHub em Settings → Secrets and
+// variables → Actions → New repository secret, com o nome UNSPLASH_ACCESS_KEY.
+// Sem a chave, o script não faz nada e o site usa um fundo de praia no lugar.
+//
 // Uso: npm run fotos   (o GitHub Actions roda isso sozinho a cada publicação)
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -27,23 +32,30 @@ const vagas = [
 mkdirSync(pastaFotos, { recursive: true });
 const creditos = existsSync(arquivoCreditos) ? JSON.parse(readFileSync(arquivoCreditos, 'utf8')) : {};
 const usados = new Set(Object.values(creditos).map((c) => c.id));
-const cabecalhos = { 'User-Agent': 'site-casamento (GitHub Actions)', Accept: 'application/json' };
+const chave = process.env.UNSPLASH_ACCESS_KEY;
+const cabecalhos = { Authorization: `Client-ID ${chave}`, 'Accept-Version': 'v1' };
+const faltando = vagas.filter((v) => !existsSync(join(pastaFotos, v.arquivo)));
+if (faltando.length && !chave) {
+  console.warn('Sem UNSPLASH_ACCESS_KEY: fotos provisórias não baixadas (o site usa um fundo no lugar).');
+  process.exit(0);
+}
 
 let baixadas = 0;
 for (const vaga of vagas) {
   const destino = join(pastaFotos, vaga.arquivo);
   if (existsSync(destino)) continue;
   try {
-    const url = `https://unsplash.com/napi/search/photos?query=${encodeURIComponent(vaga.busca)}&per_page=20&orientation=${vaga.orientacao}`;
+    const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(vaga.busca)}&per_page=20&orientation=${vaga.orientacao}&content_filter=high`;
     const resp = await fetch(url, { headers: cabecalhos });
     if (!resp.ok) throw new Error(`busca ${resp.status}`);
     const { results = [] } = await resp.json();
-    // Só fotos de licença Unsplash comum (sem Unsplash+ pago).
-    const foto = results.find((r) => !r.premium && !r.plus && r.urls?.raw && !usados.has(r.id));
+    const foto = results.find((r) => r.urls?.raw && !usados.has(r.id));
     if (!foto) throw new Error('nenhuma foto livre encontrada');
     const img = await fetch(`${foto.urls.raw}&w=${vaga.largura}&q=80&fm=jpg&fit=crop`);
     if (!img.ok) throw new Error(`download ${img.status}`);
     writeFileSync(destino, Buffer.from(await img.arrayBuffer()));
+    // Regra da API do Unsplash: avisar o download.
+    if (foto.links?.download_location) await fetch(foto.links.download_location, { headers: cabecalhos }).catch(() => {});
     usados.add(foto.id);
     creditos[vaga.arquivo] = {
       id: foto.id,

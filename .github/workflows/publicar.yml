@@ -31,6 +31,8 @@ jobs:
       - name: Baixar fotos provisórias que faltam (Unsplash)
         run: npm run fotos
         continue-on-error: true
+        env:
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
 
       - name: Guardar fotos baixadas no repositório
         continue-on-error: true
@@ -44,8 +46,6 @@ jobs:
           fi
 
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - run: npm run build
 

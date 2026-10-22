@@ -646,8 +646,6 @@ h3 { font-family: var(--texto); font-size: 18px; font-weight: 600; line-height: 
 
 .rodape { padding: 32px 0 40px; text-align: center; font-size: 12px; color: var(--texto-suave); }
 .rodape .assina { letter-spacing: 3px; text-transform: uppercase; font-weight: 500; color: var(--petroleo); margin: 0 0 10px; }
-.rodape .creditos { margin: 0; line-height: 1.8; }
-.rodape a { color: var(--texto-suave); }
 
 /* ---------- Animações ---------- */
 

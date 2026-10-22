@@ -6,7 +6,6 @@ import Foto from '../components/Foto.astro';
 import Onda from '../components/Onda.astro';
 import { casamento as c } from '../data/casamento';
 import { urlGoogleAgenda } from '../data/agenda';
-import creditos from '../data/creditos-fotos.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const { noivos, data, local } = c;
@@ -33,9 +32,6 @@ const menu = [
   { href: '#duvidas', texto: 'Dúvidas' },
   ...(c.presentes.ligada ? [{ href: '#presentes', texto: 'Presentes' }] : []),
 ];
-
-const listaCreditos = Object.values(creditos as Record<string, { autor: string; perfil: string }>)
-  .filter((v, i, todos) => todos.findIndex((o) => o.autor === v.autor) === i);
 
 const ogImagem = new URL('og.jpg', c.seo.url).toString();
 ---
@@ -385,15 +381,6 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
 
   <footer class="rodape container">
     <p class="assina">{noivos.primeiro} &amp; {noivos.segundo} · {local.cidade} {new Date(data.cerimonia).getFullYear()}</p>
-    {listaCreditos.length > 0 && (
-      <p class="creditos">
-        Fotos provisórias:{' '}
-        {listaCreditos.map((cr, i) => (
-          <>{i > 0 && ', '}<a href={cr.perfil} target="_blank" rel="noopener">{cr.autor}</a></>
-        ))}{' '}
-        / <a href="https://unsplash.com/?utm_source=site-casamento&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a>
-      </p>
-    )}
   </footer>
 
   <script>

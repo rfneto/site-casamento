@@ -1,11 +1,10 @@
 // Configuração do Astro.
-// `site` + `base` = endereço final no GitHub Pages: https://rfneto.github.io/site-casamento/
-// Se um dia usarem domínio próprio, troque `site` pelo domínio e apague `base`.
+// `site` = endereço final na Vercel. Se mudar o domínio (ex.: domínio próprio),
+// troque aqui e em `seo.url` no arquivo de dados.
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://rfneto.github.io',
-  base: '/site-casamento',
+  site: 'https://site-casamento.vercel.app',
   trailingSlash: 'ignore',
   devToolbar: { enabled: false },
 });

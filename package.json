@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "fotos": "node scripts/baixar-fotos.mjs"
+    "preview": "astro preview"
   },
   "dependencies": {
     "astro": "^5.0.0"

@@ -1,9 +1,9 @@
 # Ilma & Ruy · Punta Cana 2027
 
-Site do casamento: **https://rfneto.github.io/site-casamento/**
+Site do casamento: **https://site-casamento.vercel.app** (endereço confirmado na primeira publicação na Vercel)
 
 Site estático (Astro), uma página só, com menu fixo. Fica fora dos buscadores
-(`noindex, nofollow` + `robots.txt`), mas qualquer pessoa com o link abre.
+(`noindex, nofollow` na página, no cabeçalho `X-Robots-Tag` da Vercel e no `robots.txt`), mas qualquer pessoa com o link abre.
 
 > **O repositório é público.** Tudo o que estiver nos arquivos fica visível no
 > GitHub. Não escreva nome de hotel ainda não fechado, nomes de convidados,
@@ -13,16 +13,17 @@ Site estático (Astro), uma página só, com menu fixo. Fica fora dos buscadores
 
 Quase tudo está em **um arquivo só**: [`src/data/casamento.ts`](src/data/casamento.ts).
 Ele é todo comentado em português. Dá para editar direto no site do GitHub:
-abra o arquivo → ícone de lápis → edite → **Commit changes**. Em 1–2 minutos o
-site se atualiza sozinho.
+abra o arquivo → ícone de lápis → edite → **Commit changes**. Em 1–2 minutos a
+Vercel republica o site sozinha.
 
 Regras para não quebrar: troque só o texto entre aspas `'assim'` e mantenha
-vírgulas e chaves. Se der erro, o site antigo continua no ar e a aba **Actions**
-mostra um ❌ — é só desfazer a última mudança.
+vírgulas e chaves. Se der erro, o site antigo continua no ar e o commit
+ganha um ❌ da Vercel no GitHub — é só desfazer a última mudança.
 
-## Como trocar as fotos
+## Como colocar as fotos
 
-As fotos ficam em `public/fotos/`. Hoje são fotos provisórias do Unsplash.
+As fotos ficam em `public/fotos/`. Por enquanto não há nenhuma: as molduras
+mostram um fundo desenhado de céu, mar e areia.
 
 | Arquivo | Onde aparece | Formato ideal |
 |---|---|---|
@@ -30,19 +31,14 @@ As fotos ficam em `public/fotos/`. Hoje são fotos provisórias do Unsplash.
 | `historia-1.jpg`, `historia-2.jpg`, `historia-3.jpg` | polaroides de "Nossa história" | vertical (4:5), ~900 px |
 | `hospedagem.jpg` | Hospedagem | horizontal, ~1600 px |
 
-1. Salve a foto de vocês **com o mesmo nome** em `public/fotos/` (no GitHub:
-   entre na pasta → **Add file → Upload files**). Use JPG de até ~500 KB.
-2. Em `src/data/creditos-fotos.json`, apague o bloco daquela foto (o crédito do
-   Unsplash só vale para foto de banco).
-3. Em `src/data/casamento.ts`, atualize o `alt` (descrição para leitor de tela)
+1. Salve a foto **com o nome da tabela** em `public/fotos/` (no GitHub: entre
+   na pasta → **Add file → Upload files**). Use JPG de até ~500 KB.
+2. Em `src/data/casamento.ts`, atualize o `alt` (descrição para leitor de tela)
    e a `legenda` das polaroides.
-
-Se um arquivo de foto não existir, o site mostra um fundo de praia no lugar e o
-GitHub tenta baixar uma foto provisória na próxima publicação.
 
 A imagem da prévia do WhatsApp (`public/og.jpg`) e os ícones são gerados por
 `node scripts/gerar-imagens.mjs` (precisa do Playwright; veja o topo do script).
-Rode de novo se trocar a foto da abertura e quiser a nova foto na prévia.
+Se rodar de novo depois de subir `abertura.jpg`, a foto entra na prévia.
 
 ## Como preencher a programação
 
@@ -62,18 +58,25 @@ vazia, aparece "Programação em breve".
 - **Lista de presentes:** em `presentes`, adicione os links e troque `ligada`
   para `true`. Aparece a seção e o item no menu.
 
-## Como republicar
+## Como publicar e republicar (Vercel)
 
-Todo push no branch publicado dispara o workflow
-[`.github/workflows/publicar.yml`](.github/workflows/publicar.yml), que monta o
-site e publica no GitHub Pages. Para republicar sem mudar nada: aba **Actions →
-Publicar site → Run workflow**.
+O site é publicado pela Vercel, ligada a este repositório do GitHub.
+
+- **Primeira vez:** em vercel.com/new, entre com o GitHub, escolha
+  `rfneto/site-casamento` → **Import** → **Deploy** (a Vercel reconhece o Astro
+  sozinha; as configurações estão em `vercel.json`).
+- **Depois:** todo commit no branch de produção republica o site sozinho.
+- **Republicar sem mudar nada:** na Vercel, projeto → **Deployments** → no
+  último → **⋯ → Redeploy**.
+- **Mudou o endereço** (outro nome ou domínio próprio)? Troque `site` em
+  `astro.config.mjs` e `seo.url` em `src/data/casamento.ts`, para a prévia do
+  WhatsApp e o "Salvar na agenda" apontarem certo.
 
 ## Rodar no computador (opcional)
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321/site-casamento/
+npm run dev        # http://localhost:4321/
 npm run build      # gera a pasta dist/
 ```
 

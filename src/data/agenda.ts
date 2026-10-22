@@ -40,7 +40,7 @@ export const conteudoIcs = [
   'CALSCALE:GREGORIAN',
   'METHOD:PUBLISH',
   'BEGIN:VEVENT',
-  'UID:casamento-ilma-ruy-2027@rfneto.github.io',
+  'UID:casamento-ilma-ruy-2027@site-casamento.vercel.app',
   `DTSTAMP:${utc(new Date())}`,
   `DTSTART:${utc(inicio)}`,
   `DTEND:${utc(fim)}`,

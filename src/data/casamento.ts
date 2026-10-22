@@ -86,19 +86,18 @@ export const casamento = {
   // ---------------------------------------------------------------------------
   // FOTOS
   // ---------------------------------------------------------------------------
-  // Os arquivos ficam em public/fotos/. Para trocar por fotos de vocês, salve
-  // a nova imagem com o MESMO nome (ex.: public/fotos/abertura.jpg) ou mude o
-  // nome aqui. Depois apague a linha correspondente em
-  // src/data/creditos-fotos.json (crédito só vale para foto de banco).
-  // `alt` = descrição da foto para quem usa leitor de tela. Mantenha atualizado.
+  // Os arquivos ficam em public/fotos/. Enquanto um arquivo não existir, o site
+  // mostra um fundo desenhado de céu, mar e areia no lugar. Para colocar a foto,
+  // salve a imagem com o nome indicado (ex.: public/fotos/abertura.jpg).
+  // `alt` = descrição da foto para quem usa leitor de tela. Atualize junto.
   fotos: {
-    abertura: { arquivo: 'fotos/abertura.jpg', alt: 'Praia caribenha de areia clara e mar turquesa' },
+    abertura: { arquivo: 'fotos/abertura.jpg', alt: 'Ilma e Ruy na praia' },
     historia: [
-      { arquivo: 'fotos/historia-1.jpg', alt: 'Foto provisória: praia com coqueiros', legenda: '[Como nos conhecemos]' },
-      { arquivo: 'fotos/historia-2.jpg', alt: 'Foto provisória: mar do Caribe', legenda: '[Uma viagem marcante]' },
-      { arquivo: 'fotos/historia-3.jpg', alt: 'Foto provisória: pôr do sol na praia', legenda: '[O pedido]' },
+      { arquivo: 'fotos/historia-1.jpg', alt: '[Descrever a foto 1]', legenda: '[Como nos conhecemos]' },
+      { arquivo: 'fotos/historia-2.jpg', alt: '[Descrever a foto 2]', legenda: '[Uma viagem marcante]' },
+      { arquivo: 'fotos/historia-3.jpg', alt: '[Descrever a foto 3]', legenda: '[O pedido]' },
     ],
-    hospedagem: { arquivo: 'fotos/hospedagem.jpg', alt: 'Foto provisória: resort à beira-mar no Caribe' },
+    hospedagem: { arquivo: 'fotos/hospedagem.jpg', alt: 'Resort à beira-mar' },
   },
 
   // ---------------------------------------------------------------------------
@@ -322,7 +321,7 @@ export const casamento = {
     titulo: 'Ilma & Ruy · Punta Cana 2027',
     descricao: 'Vamos casar pé na areia em Punta Cana, em maio de 2027. Data, programação e o checklist da viagem.',
     // Endereço público do site (usado no link da agenda e no Open Graph).
-    url: 'https://rfneto.github.io/site-casamento/',
+    url: 'https://site-casamento.vercel.app/',
   },
 };
 

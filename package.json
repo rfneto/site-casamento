@@ -1,0 +1,15 @@
+{
+  "name": "site-casamento",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "fotos": "node scripts/baixar-fotos.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.0.0"
+  }
+}

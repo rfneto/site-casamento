@@ -1,0 +1,21 @@
+---
+// Mostra a foto se o arquivo existir em public/; senão, um fundo de praia
+// (céu, mar e areia) no lugar, para o layout nunca quebrar.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props {
+  arquivo: string;
+  alt: string;
+  class?: string;
+  carregar?: 'lazy' | 'eager';
+}
+const { arquivo, alt, class: classe = 'foto', carregar = 'lazy' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const existe = existsSync(join(process.cwd(), 'public', arquivo));
+---
+{existe ? (
+  <img class={classe} src={base + arquivo} alt={alt} loading={carregar} decoding="async" />
+) : (
+  <div class:list={[classe, 'foto-vazia']} role="img" aria-label={alt}></div>
+)}

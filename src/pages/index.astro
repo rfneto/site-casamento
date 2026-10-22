@@ -1,0 +1,403 @@
+---
+// Página única do site. Os textos vêm de src/data/casamento.ts.
+import '../styles/global.css';
+import Carimbo from '../components/Carimbo.astro';
+import Foto from '../components/Foto.astro';
+import Onda from '../components/Onda.astro';
+import { casamento as c } from '../data/casamento';
+import { urlGoogleAgenda } from '../data/agenda';
+import creditos from '../data/creditos-fotos.json';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const { noivos, data, local } = c;
+
+const textoData = data.confirmada ? data.textoConfirmado : data.textoProvisorio;
+const mostrarHotel = local.hotelConfirmado && local.hotel.nome.trim() !== '';
+const dias = c.programacao.dias;
+const alvo = new Date(data.cerimonia).getTime();
+const diasFaltando = Math.max(0, Math.floor((alvo - Date.now()) / 86400000));
+
+// "maio 2027" para o cartão de embarque
+const mesAno = new Intl.DateTimeFormat('pt-BR', { month: 'short', year: 'numeric', timeZone: 'America/Santo_Domingo' })
+  .format(new Date(data.cerimonia)).replace('.', '').replace(' de ', ' ');
+const dataCartao = data.confirmada
+  ? new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', timeZone: 'America/Santo_Domingo' }).format(new Date(data.cerimonia))
+  : mesAno.charAt(0).toUpperCase() + mesAno.slice(1);
+
+const menu = [
+  { href: '#historia', texto: 'História' },
+  { href: '#casamento', texto: 'Casamento' },
+  { href: '#programacao', texto: 'Programação' },
+  { href: '#viagem', texto: 'Viagem' },
+  { href: '#hospedagem', texto: 'Hospedagem' },
+  { href: '#duvidas', texto: 'Dúvidas' },
+  ...(c.presentes.ligada ? [{ href: '#presentes', texto: 'Presentes' }] : []),
+];
+
+const listaCreditos = Object.values(creditos as Record<string, { autor: string; perfil: string }>)
+  .filter((v, i, todos) => todos.findIndex((o) => o.autor === v.autor) === i);
+
+const ogImagem = new URL('og.jpg', c.seo.url).toString();
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{c.seo.titulo}</title>
+  <meta name="description" content={c.seo.descricao} />
+  <!-- Fora dos buscadores -->
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <meta name="googlebot" content="noindex, nofollow" />
+  <meta name="theme-color" content="#f6f1e7" />
+
+  <!-- Open Graph (prévia do link no WhatsApp) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:title" content={c.seo.titulo} />
+  <meta property="og:description" content={c.seo.descricao} />
+  <meta property="og:url" content={c.seo.url} />
+  <meta property="og:image" content={ogImagem} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Ilma & Ruy · Punta Cana 2027 — cartão de embarque" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+  <link rel="icon" href={`${base}favicon-32.png`} sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
+  <script is:inline>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="topo">
+    <div class="topo-inner container">
+      <div class="topo-linha">
+        <a class="monograma" href="#inicio" aria-label={`${noivos.primeiro} e ${noivos.segundo} — início`}>I<em>&amp;</em>R</a>
+        <a class="botao botao-petroleo" href="#viagem">Checklist</a>
+      </div>
+      <nav aria-label="Seções">
+        <ul class="menu">
+          {menu.map((m) => <li><a href={m.href}>{m.texto}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- ================= ABERTURA ================= -->
+    <section id="inicio" class="container abertura">
+      <div class="abertura-texto surge">
+        <p class="eyebrow">{c.abertura.chamada}</p>
+        <h1 class="nomes">{noivos.primeiro} <span class="e">&amp;</span> {noivos.segundo}</h1>
+        <p class="quando">
+          {c.abertura.frase}<br />
+          <strong>{mostrarHotel && <span class="nw">{local.hotel.nome} · </span>}<span class="nw">{local.cidade},</span> <span class="nw">{local.pais} ·</span> <span class="nw">{textoData}</span></strong>
+        </p>
+
+        <ul class="contagem" data-contagem data-alvo={data.cerimonia} aria-label="Contagem regressiva para a cerimônia">
+          <li><span class="num" data-cd="d">{diasFaltando}</span><span class="rot">dias</span></li>
+          <li><span class="num" data-cd="h">--</span><span class="rot">horas</span></li>
+          <li><span class="num" data-cd="m">--</span><span class="rot">min</span></li>
+          <li><span class="num" data-cd="s">--</span><span class="rot">seg</span></li>
+        </ul>
+        {!data.confirmada && <p class="contagem-nota">Contagem até a data provisória; o dia exato será confirmado em breve.</p>}
+
+        <div class="acoes">
+          <a class="botao botao-terracota" href="#viagem">Checklist da viagem</a>
+          <details class="agenda">
+            <summary class="botao botao-contorno">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>
+              Salvar na agenda
+            </summary>
+            <div class="agenda-menu">
+              <a href={urlGoogleAgenda} target="_blank" rel="noopener">
+                <span>Google Agenda<small>abre em nova aba</small></span>
+              </a>
+              <a href={`${base}casamento.ics`} download="casamento-ilma-ruy.ics">
+                <span>iPhone, Outlook e outros<small>arquivo .ics</small></span>
+              </a>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="cena surge-2">
+        <div class="arco">
+          <Foto arquivo={c.fotos.abertura.arquivo} alt={c.fotos.abertura.alt} carregar="eager" />
+          <svg class="sombra-palmeira" viewBox="0 0 400 400" preserveAspectRatio="none" aria-hidden="true">
+            <defs><filter id="desfoque"><feGaussianBlur stdDeviation="7"></feGaussianBlur></filter></defs>
+            <g filter="url(#desfoque)" fill="#1F3A44" opacity=".22">
+              <path d="M-20 -10 Q 160 60 260 220" stroke="#1F3A44" stroke-width="6" fill="none"></path>
+              <ellipse cx="60" cy="0" rx="58" ry="11" transform="rotate(70 60 0)"></ellipse>
+              <ellipse cx="30" cy="48" rx="58" ry="11" transform="rotate(-15 30 48)"></ellipse>
+              <ellipse cx="130" cy="30" rx="62" ry="12" transform="rotate(75 130 30)"></ellipse>
+              <ellipse cx="96" cy="96" rx="62" ry="12" transform="rotate(-20 96 96)"></ellipse>
+              <ellipse cx="200" cy="80" rx="62" ry="12" transform="rotate(80 200 80)"></ellipse>
+              <ellipse cx="150" cy="146" rx="62" ry="12" transform="rotate(-25 150 146)"></ellipse>
+              <ellipse cx="250" cy="140" rx="56" ry="11" transform="rotate(85 250 140)"></ellipse>
+              <ellipse cx="200" cy="200" rx="56" ry="11" transform="rotate(-30 200 200)"></ellipse>
+            </g>
+          </svg>
+        </div>
+
+        <div class="cartao-embarque" role="img" aria-label={`Cartão de embarque: voo ${c.cartaoEmbarque.voo}, de ${c.cartaoEmbarque.origem.cidade} para ${c.cartaoEmbarque.destino.cidade}, ${textoData}, portão ${c.cartaoEmbarque.portao}, embarque às ${c.cartaoEmbarque.embarque}`}>
+          <div class="ce-topo" aria-hidden="true"><span>Cartão de embarque</span><span>Voo {c.cartaoEmbarque.voo}</span></div>
+          <div class="ce-rota" aria-hidden="true">
+            <div><span class="cod">{c.cartaoEmbarque.origem.codigo}</span><span class="cid">{c.cartaoEmbarque.origem.cidade}</span></div>
+            <svg width="70" height="20" viewBox="0 0 70 20"><line x1="2" y1="10" x2="50" y2="10" stroke="#B5523A" stroke-width="1.5" stroke-dasharray="4 4"></line><path d="M54 10 L68 10 M61 4 L68 10 L61 16" stroke="#B5523A" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div class="fim"><span class="cod">{c.cartaoEmbarque.destino.codigo}</span><span class="cid">{c.cartaoEmbarque.destino.cidade}</span></div>
+          </div>
+          <dl class="ce-dados" aria-hidden="true">
+            <div><dt>Data</dt><dd>{dataCartao}</dd></div>
+            <div><dt>Portão</dt><dd>{c.cartaoEmbarque.portao}</dd></div>
+            <div><dt>Embarque</dt><dd>{c.cartaoEmbarque.embarque}</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <Onda de="#f6f1e7" para="#ffffff" />
+
+    <!-- ================= NOSSA HISTÓRIA ================= -->
+    <section id="historia" class="faixa-branca">
+      <div class="container secao historia revela">
+        <div class="historia-texto">
+          <div class="cabeca">
+            <Carimbo numero="01" rotulo="Partida" giro={-10} />
+            <h2>{c.historia.titulo}</h2>
+          </div>
+          {c.historia.paragrafos.map((p) => <p>{p}</p>)}
+        </div>
+        <ul class="polaroides">
+          {c.fotos.historia.map((f) => (
+            <li>
+              <figure style="margin:0">
+                <Foto arquivo={f.arquivo} alt={f.alt} />
+                <figcaption>{f.legenda}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <Onda de="#ffffff" para="#f6f1e7" />
+
+    <!-- ================= O CASAMENTO ================= -->
+    <section id="casamento" class="container secao revela">
+      <div class="cabeca">
+        <Carimbo numero="02" rotulo="Chegada" cor="mar" giro={8} />
+        <h2>O casamento</h2>
+      </div>
+      <div class="cartoes">
+        <article class="cartao">
+          <span class="destaque">{c.evento.cerimonia.horario}</span>
+          <h3>{c.evento.cerimonia.titulo}</h3>
+          <p>{c.evento.cerimonia.texto}</p>
+        </article>
+        <article class="cartao">
+          <span class="destaque menor">Em seguida</span>
+          <h3>{c.evento.depois.titulo}</h3>
+          <p>{c.evento.depois.texto}</p>
+        </article>
+        <article class="cartao">
+          <span class="destaque menor">Dress code</span>
+          <h3>{c.evento.dressCode.titulo}</h3>
+          <p>{c.evento.dressCode.texto}</p>
+        </article>
+      </div>
+    </section>
+
+    <Onda de="#f6f1e7" para="#ffffff" invertida />
+
+    <!-- ================= PROGRAMAÇÃO ================= -->
+    <section id="programacao" class="faixa-branca">
+      <div class="container secao programacao revela">
+        <div>
+          <div class="cabeca">
+            <Carimbo numero="03" rotulo="Roteiro" giro={-6} />
+            <h2>Programação</h2>
+          </div>
+          <p class="suave" style="margin:0">
+            {dias.length ? 'Nosso itinerário, dia a dia. Toque em cada dia para ver os horários.' : 'O itinerário dos dias em Punta Cana vai morar aqui.'}
+          </p>
+          {dias.length > 0 && (
+            <div class="abas" role="tablist" aria-label="Dias da programação" data-abas>
+              {dias.map((d, i) => (
+                <button class="aba" role="tab" id={`aba-${i}`} aria-controls={`dia-${i}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{d.aba}</button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {dias.length > 0 ? (
+          <div class="itinerario">
+            {dias.map((d, i) => (
+              <div role="tabpanel" id={`dia-${i}`} aria-labelledby={`aba-${i}`} hidden={i !== 0} tabindex="0">
+                <h3>{d.titulo}</h3>
+                <ol>
+                  {d.itens.map((it) => (
+                    <li>
+                      <span class="hora">{it.horario}</span>
+                      <span>
+                        <span class="ativ">{it.atividade}</span>
+                        <span class="det">{[it.local, it.observacao].filter(Boolean).join(' · ')}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div class="em-breve">
+            <span class="selo">Em breve</span>
+            <p>{c.programacao.textoVazio}</p>
+            <div class="linhas" aria-hidden="true"><span></span><span></span><span></span></div>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <Onda de="#ffffff" para="#f6f1e7" />
+
+    <!-- ================= VIAGEM / CHECKLIST ================= -->
+    <section id="viagem" class="container secao revela">
+      <div class="cabeca">
+        <Carimbo numero="04" rotulo="Imigração" giro={-4} />
+        <h2>{c.viagem.titulo}</h2>
+      </div>
+      <div class="barra-check">
+        <p>{c.viagem.intro}</p>
+        <div class="contador">
+          <span class="pilula" aria-live="polite"><span data-prontos>0</span> de {c.viagem.checklist.length} prontos</span>
+          <button class="desmarcar" type="button" data-desmarcar>Desmarcar tudo</button>
+        </div>
+      </div>
+      <div class="progresso" aria-hidden="true"><span data-progresso></span></div>
+
+      <ul class="checklist" data-checklist>
+        {c.viagem.checklist.map((q) => (
+          <li data-item={q.id}>
+            <button class="check" type="button" aria-pressed="false" data-id={q.id}>
+              <svg class="marca" viewBox="0 0 28 28" aria-hidden="true">
+                <circle cx="14" cy="14" r="12.5" fill="none" stroke="#B5A88F" stroke-width="1.6"></circle>
+                <circle class="cheio" cx="14" cy="14" r="13" fill="#1C6E76"></circle>
+                <path class="ok" d="M8 14.5 L12 18.5 L20 10" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <span>
+                <span class="rot">{q.rotulo}</span>
+                <span class="tit">{q.titulo}</span>
+                <span class="txt">{q.texto}</span>
+              </span>
+            </button>
+            {q.link && <a class="check-link" href={q.link.url} target="_blank" rel="noopener">{q.link.texto} ↗</a>}
+          </li>
+        ))}
+      </ul>
+
+      <dl class="infos">
+        {c.viagem.infos.map((i) => (
+          <div class="info"><dt>{i.rotulo}</dt><dd>{i.texto}</dd></div>
+        ))}
+      </dl>
+
+      <p class="fontes">
+        Conferido em {c.viagem.dataChecagem}. Fontes oficiais:{' '}
+        {c.viagem.fontes.map((f, i) => (
+          <>{i > 0 && ' · '}<a href={f.url} target="_blank" rel="noopener">{f.texto}</a></>
+        ))}. {c.viagem.aviso}
+      </p>
+    </section>
+
+    <!-- ================= HOSPEDAGEM ================= -->
+    <section id="hospedagem" class="container secao revela" style="padding-top:0">
+      <div class="cabeca">
+        <Carimbo numero="05" rotulo="Check-in" cor="mar" giro={6} />
+        <h2>{c.hospedagem.titulo}</h2>
+      </div>
+      <div class="hospedagem">
+        <Foto arquivo={c.fotos.hospedagem.arquivo} alt={c.fotos.hospedagem.alt} />
+        <div class="hospedagem-texto">
+          <span class="etiqueta">All-inclusive · pé na areia</span>
+          {mostrarHotel && <span class="hotel-nome">{local.hotel.nome}</span>}
+          {mostrarHotel && local.hotel.regiao && <span class="suave">{local.hotel.regiao}, {local.cidade}</span>}
+          <p>{mostrarHotel ? c.hospedagem.textoConfirmado : c.hospedagem.texto}</p>
+          {mostrarHotel && local.hotel.site && <a href={local.hotel.site} target="_blank" rel="noopener">Site do hotel ↗</a>}
+        </div>
+      </div>
+    </section>
+
+    <Onda de="#f6f1e7" para="#ffffff" invertida />
+
+    <!-- ================= DÚVIDAS ================= -->
+    <section id="duvidas" class="faixa-branca">
+      <div class="container secao revela">
+        <div class="cabeca cabeca-centro">
+          <Carimbo numero="06" rotulo="Dúvidas" giro={-8} />
+          <h2>Perguntas frequentes</h2>
+        </div>
+        <div class="faq">
+          {c.faq.map((f) => (
+            <details>
+              <summary><span>{f.pergunta}</span><span class="sinal" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span></summary>
+              <p>{f.resposta}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRESENTES (desligado por padrão) ================= -->
+    {c.presentes.ligada && (
+      <section id="presentes" class="container secao revela">
+        <div class="presentes">
+          <Carimbo numero="07" rotulo="Presentes" cor="mar" giro={5} />
+          <h2>{c.presentes.titulo}</h2>
+          <p class="suave">{c.presentes.texto}</p>
+          <div class="acoes">
+            {c.presentes.links.map((l) => <a class="botao botao-terracota" href={l.url} target="_blank" rel="noopener">{l.texto}</a>)}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <Onda de={c.presentes.ligada ? '#f6f1e7' : '#ffffff'} para="#1f3a44" />
+
+    <!-- ================= ENCERRAMENTO ================= -->
+    <section class="faixa-petroleo">
+      <div class="container secao encerramento">
+        <div class="horizonte" aria-hidden="true" style="color:#46636c">
+          <svg width="40" height="20" viewBox="0 0 40 20"><path d="M2 16a18 14 0 0 1 36 0" fill="none" stroke="#E6A68F" stroke-width="1.6"></path><path d="M0 18h40" stroke="#E6A68F" stroke-width="1.6"></path></svg>
+        </div>
+        <p class="eyebrow">Faltam <span data-cd="d">{diasFaltando}</span> dias</p>
+        <h2>{c.encerramento.titulo}</h2>
+        <p>{c.encerramento.texto}</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape container">
+    <p class="assina">{noivos.primeiro} &amp; {noivos.segundo} · {local.cidade} {new Date(data.cerimonia).getFullYear()}</p>
+    {listaCreditos.length > 0 && (
+      <p class="creditos">
+        Fotos provisórias:{' '}
+        {listaCreditos.map((cr, i) => (
+          <>{i > 0 && ', '}<a href={cr.perfil} target="_blank" rel="noopener">{cr.autor}</a></>
+        ))}{' '}
+        / <a href="https://unsplash.com/?utm_source=site-casamento&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a>
+      </p>
+    )}
+  </footer>
+
+  <script>
+    import '../scripts/site';
+  </script>
+</body>
+</html>

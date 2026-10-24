@@ -1,0 +1,18 @@
+---
+// Ilustração das cangas em WebP, com PNG de reserva para navegadores antigos.
+// Os arquivos ficam em public/ilustracoes/ (gerados por scripts/otimizar-ilustracoes.py).
+interface Props {
+  nome: 'coqueiro' | 'espreguicadeira' | 'estrela-do-mar';
+  alt?: string;
+  class?: string;
+  largura: number;
+  altura: number;
+  carregar?: 'lazy' | 'eager';
+}
+const { nome, alt = '', class: classe, largura, altura, carregar = 'lazy' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<picture class={classe}>
+  <source srcset={`${base}ilustracoes/${nome}.webp`} type="image/webp" />
+  <img src={`${base}ilustracoes/${nome}.png`} alt={alt} width={largura} height={altura} loading={carregar} decoding="async" aria-hidden={alt ? undefined : 'true'} />
+</picture>

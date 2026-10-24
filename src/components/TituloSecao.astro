@@ -1,0 +1,10 @@
+---
+// Título de seção na letra de pincel, marcado pela estrela-do-mar da canga.
+import Ilustracao from './Ilustracao.astro';
+interface Props { centro?: boolean }
+const { centro = false } = Astro.props;
+---
+<div class:list={['titulo-secao', { centro }]}>
+  <Ilustracao nome="estrela-do-mar" class="estrela-marcador" largura={240} altura={231} />
+  <h2><slot /></h2>
+</div>

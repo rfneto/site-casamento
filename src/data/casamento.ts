@@ -69,29 +69,21 @@ export const casamento = {
   // ---------------------------------------------------------------------------
   // ABERTURA (topo do site)
   // ---------------------------------------------------------------------------
+  // A abertura reproduz a canga: nomes, listras, coqueiro, espreguiçadeiras e
+  // "Maio 2027" (mês e ano saem de `data.cerimonia`). Abaixo dos nomes aparece:
+  // chamada · cidade, país · data · horário da cerimônia.
   abertura: {
     chamada: 'Vamos casar',
-    frase: 'Pé na areia, ao pôr do sol do Caribe',
-  },
-
-  // Cartão de embarque que flutua sobre a foto da abertura.
-  cartaoEmbarque: {
-    voo: 'I&R 2027',
-    origem: { codigo: 'GRU', cidade: 'São Paulo' },
-    destino: { codigo: 'PUJ', cidade: 'Punta Cana' },
-    portao: 'Praia',
-    embarque: '17h',
   },
 
   // ---------------------------------------------------------------------------
   // FOTOS
   // ---------------------------------------------------------------------------
   // Os arquivos ficam em public/fotos/. Enquanto um arquivo não existir, o site
-  // mostra um fundo desenhado de céu, mar e areia no lugar. Para colocar a foto,
-  // salve a imagem com o nome indicado (ex.: public/fotos/abertura.jpg).
+  // mostra as listras de aquarela da canga no lugar. Para colocar a foto,
+  // salve a imagem com o nome indicado (ex.: public/fotos/historia-1.jpg).
   // `alt` = descrição da foto para quem usa leitor de tela. Atualize junto.
   fotos: {
-    abertura: { arquivo: 'fotos/abertura.jpg', alt: 'Ilma e Ruy na praia' },
     historia: [
       { arquivo: 'fotos/historia-1.jpg', alt: '[Descrever a foto 1]', legenda: '[Como nos conhecemos]' },
       { arquivo: 'fotos/historia-2.jpg', alt: '[Descrever a foto 2]', legenda: '[Uma viagem marcante]' },
@@ -163,7 +155,8 @@ export const casamento = {
   // ---------------------------------------------------------------------------
   // PARA ENTRAR EM PUNTA CANA
   // ---------------------------------------------------------------------------
-  // Conferido em 21/10/2026; reconferido em 22/10/2026 ao construir o site.
+  // Conferido em 21/10/2026; reconferido em 22/10/2026 e em 24/10/2026 (sem
+  // mudanças: exceção do passaporte continua terminando em 31/12/2026).
   // RECONFERIR ANTES DE MAIO/2027 — regras de entrada mudam.
   // Fontes:
   //  • Turismo da República Dominicana (requisitos de entrada, febre amarela):
@@ -179,7 +172,7 @@ export const casamento = {
   viagem: {
     titulo: 'Para entrar em Punta Cana',
     intro: 'O checklist de cada viajante. Toque em cada item para marcar o que já está pronto — fica salvo só neste aparelho.',
-    dataChecagem: '22/10/2026',
+    dataChecagem: '24/10/2026',
     aviso: 'Regras de entrada podem mudar. Vamos reconferir tudo antes da viagem e avisar a família.',
 
     // `id` não pode repetir e não deve mudar depois de publicado (é o que

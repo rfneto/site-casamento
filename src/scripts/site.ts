@@ -84,6 +84,20 @@ if (lista) {
   pinta();
 }
 
+// ---------- Paralaxe sutil das listras da abertura ----------
+const listras = document.querySelector<HTMLElement>('[data-paralaxe]');
+if (listras && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  let pendente = false;
+  const move = () => {
+    pendente = false;
+    const y = Math.min(window.scrollY, window.innerHeight);
+    listras.style.transform = `translate3d(0, ${y * 0.18}px, 0)`;
+  };
+  window.addEventListener('scroll', () => {
+    if (!pendente) { pendente = true; requestAnimationFrame(move); }
+  }, { passive: true });
+}
+
 // ---------- Entrada suave ao rolar ----------
 const revelar = document.querySelectorAll('.revela');
 if ('IntersectionObserver' in window) {

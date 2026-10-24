@@ -6,9 +6,27 @@ import TituloSecao from './TituloSecao.astro';
 import { casamento as c } from '../data/casamento';
 
 const m = c.mural;
-const url = (import.meta.env.PUBLIC_SUPABASE_URL ?? '').trim().replace(/\/$/, '');
-const chave = (import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? '').trim();
-const ligado = url.startsWith('https://') && chave.length > 20;
+// tira espaços e aspas coladas por engano, e uma barra ou /rest/v1 no fim
+const limpa = (v: unknown) => String(v ?? '').trim().replace(/^['"]|['"]$/g, '').trim();
+const url = limpa(import.meta.env.PUBLIC_SUPABASE_URL).replace(/\/(rest\/v1)?\/?$/, '');
+const chave = limpa(import.meta.env.PUBLIC_SUPABASE_ANON_KEY);
+const urlOk = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url);
+const chaveOk = chave.length > 20 && !chave.startsWith('sb_secret_');
+const ligado = urlOk && chaveOk;
+
+// Aparece no log de build da Vercel: diz por que o mural ficou em "Em breve".
+if (!ligado) {
+  const motivos = [
+    !url && 'PUBLIC_SUPABASE_URL não encontrada',
+    url && !urlOk && `PUBLIC_SUPABASE_URL fora do formato https://xxxx.supabase.co (recebido: "${url.slice(0, 40)}")`,
+    !chave && 'PUBLIC_SUPABASE_ANON_KEY não encontrada',
+    chave && chave.startsWith('sb_secret_') && 'PUBLIC_SUPABASE_ANON_KEY é a chave SECRETA; use a publishable/anon',
+    chave && !chave.startsWith('sb_secret_') && chave.length <= 20 && 'PUBLIC_SUPABASE_ANON_KEY curta demais',
+  ].filter(Boolean);
+  console.warn(`[mural] Supabase desligado: ${motivos.join('; ')}`);
+} else {
+  console.log(`[mural] Supabase ligado: ${url} (chave ${chave.slice(0, 14)}…)`);
+}
 ---
 <section id="mural" class="container secao revela" data-mural={ligado ? '' : undefined} data-url={ligado ? url : undefined} data-chave={ligado ? chave : undefined}>
   <TituloSecao>{m.titulo}</TituloSecao>

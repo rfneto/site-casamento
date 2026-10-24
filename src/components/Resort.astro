@@ -1,0 +1,52 @@
+---
+// "O resort" (ou "Hospedagem" genérica enquanto o hotel não estiver confirmado).
+import TituloSecao from './TituloSecao.astro';
+import Foto from './Foto.astro';
+import { casamento as c } from '../data/casamento';
+
+const { local, hospedagem, fotos } = c;
+const h = local.hotel;
+const confirmado = local.hotelConfirmado && h.nome.trim() !== '';
+const mapa = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.plusCode)}`;
+---
+<section id="resort" class="container secao revela">
+  <TituloSecao>{confirmado ? hospedagem.titulo : hospedagem.tituloGenerico}</TituloSecao>
+  <div class="resort">
+    <Foto arquivo={fotos.resort.arquivo} alt={fotos.resort.alt} />
+    <div class="resort-texto">
+      {confirmado ? (
+        <>
+          <span class="etiqueta">{h.regime} · {h.colecao}</span>
+          <p class="hotel-nome">{h.nome}</p>
+          <p class="resort-endereco">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
+            <span>{h.endereco}</span>
+          </p>
+          <dl class="resort-dados">
+            <div><dt>Check-in</dt><dd>{h.checkin}</dd></div>
+            <div><dt>Check-out</dt><dd>{h.checkout}</dd></div>
+          </dl>
+          <ul class="resort-criancas">
+            {h.criancas.map((t) => <li>{t}</li>)}
+          </ul>
+          <p>{hospedagem.textoConfirmado}</p>
+          <div class="acoes acoes-esquerda">
+            <a class="botao botao-indigo" href={mapa} target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
+              Abrir no mapa
+            </a>
+            <a class="botao botao-contorno" href={h.site} target="_blank" rel="noopener" hreflang="pt">Site oficial</a>
+          </div>
+          <p class="resort-mini">
+            Código no mapa: {h.plusCode} · <a href={h.siteIngles} target="_blank" rel="noopener" hreflang="en">site em inglês</a>
+          </p>
+        </>
+      ) : (
+        <>
+          <span class="etiqueta">All-inclusive · pé na areia</span>
+          <p>{hospedagem.texto}</p>
+        </>
+      )}
+    </div>
+  </div>
+</section>

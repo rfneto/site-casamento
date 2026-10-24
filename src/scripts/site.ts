@@ -1,5 +1,6 @@
 // Interações do site: contagem regressiva, abas da programação, checklist
-// salvo no navegador, entrada suave ao rolar, menu ativo e menu da agenda.
+// salvo no navegador, entrada suave ao rolar, menu ativo, menu da agenda,
+// painel de "Nossa história" e mural.
 
 // ---------- Contagem regressiva ----------
 const contagem = document.querySelector<HTMLElement>('[data-contagem]');
@@ -147,3 +148,7 @@ if (agenda) {
     if (e.key === 'Escape' && agenda.open) { agenda.open = false; agenda.querySelector('summary')!.focus(); }
   });
 }
+
+// ---------- Nossa história (painel) e mural ----------
+import './historia';
+if (document.querySelector('[data-mural]')) import('./mural');

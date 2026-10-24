@@ -1,0 +1,37 @@
+---
+// "Como chegar": um cartão por cidade de saída, com as opções de voo.
+import TituloSecao from './TituloSecao.astro';
+import { casamento as c } from '../data/casamento';
+
+const cc = c.comoChegar;
+---
+<section id="voos" class="container secao revela">
+  <TituloSecao>{cc.titulo}</TituloSecao>
+  <p class="prazo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 19h19M3 13.5l4.5 1.5 4-3.5L6 6l2-.8 8 4.6 3.6-1.5a1.6 1.6 0 0 1 1.2 3l-14 5.7L3 13.5z"></path></svg>
+    <strong>{cc.prazo}</strong>
+  </p>
+
+  <div class="voos">
+    {cc.cidades.map((cid) => (
+      <article class="voo-cidade">
+        <h3><span class="voo-cod">{cid.aeroporto}</span> {cid.cidade} <span class="voo-seta" aria-hidden="true">→</span> <span class="voo-cod">PUJ</span><span class="so-leitor"> Punta Cana</span></h3>
+        {cid.opcoes.map((o) => (
+          <div class="voo-opcao">
+            <p class="voo-cia">{o.companhia} <span>· {o.rota}</span></p>
+            <p class="voo-meta"><span>Tempo: {o.duracao}</span><span class="voo-preco">{o.preco}</span></p>
+            <ul class="voo-horarios">
+              {o.horarios.map((t) => <li>{t}</li>)}
+            </ul>
+          </div>
+        ))}
+        {cid.avisos.length > 0 && (
+          <ul class="voo-avisos">
+            {cid.avisos.map((a) => <li>{a}</li>)}
+          </ul>
+        )}
+      </article>
+    ))}
+  </div>
+  <p class="fontes">{cc.aviso}</p>
+</section>

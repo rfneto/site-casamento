@@ -1,0 +1,52 @@
+---
+// Mural "Histórias com a gente". Os dados ficam no Supabase; aqui só usamos a
+// URL do projeto e a chave pública (anon), lidas das variáveis de ambiente da
+// Vercel. Sem elas, o mural mostra "Em breve" e o formulário fica escondido.
+import TituloSecao from './TituloSecao.astro';
+import { casamento as c } from '../data/casamento';
+
+const m = c.mural;
+const url = (import.meta.env.PUBLIC_SUPABASE_URL ?? '').trim().replace(/\/$/, '');
+const chave = (import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? '').trim();
+const ligado = url.startsWith('https://') && chave.length > 20;
+---
+<section id="mural" class="container secao revela" data-mural={ligado ? '' : undefined} data-url={ligado ? url : undefined} data-chave={ligado ? chave : undefined}>
+  <TituloSecao>{m.titulo}</TituloSecao>
+
+  {ligado ? (
+    <div class="mural">
+      <form class="mural-form" data-mural-form novalidate>
+        <p class="sem-margem">{m.intro}</p>
+        <label class="campo">
+          <span>Seu nome <small>(como quer assinar)</small></span>
+          <input name="nome" type="text" maxlength="80" required autocomplete="name" />
+        </label>
+        <label class="campo">
+          <span>Sua história</span>
+          <textarea name="texto" rows="6" maxlength={m.limiteTexto} required data-limite={m.limiteTexto}></textarea>
+          <small class="contador-texto" aria-live="polite"><span data-restam>{m.limiteTexto}</span> caracteres restantes</small>
+        </label>
+        <label class="campo">
+          <span>Foto <small>(opcional · jpg, png ou webp · até {m.limiteFotoMB} MB)</small></span>
+          <input name="foto" type="file" accept="image/jpeg,image/png,image/webp" data-limite-mb={m.limiteFotoMB} data-largura={m.larguraMaxFoto} />
+        </label>
+        <!-- isca contra robôs: invisível para pessoas -->
+        <div class="isca" aria-hidden="true">
+          <label>Não preencha este campo <input name="site" type="text" tabindex="-1" autocomplete="off" /></label>
+        </div>
+        <button class="botao botao-indigo" type="submit" data-enviar>Enviar história</button>
+        <p class="mural-status" role="status" data-status data-sucesso={m.sucesso} data-erro={m.erro}></p>
+      </form>
+
+      <div class="mural-lista-caixa">
+        <ul class="mural-lista" data-mural-lista aria-live="polite"></ul>
+        <p class="mural-vazio" data-mural-vazio hidden>{m.textoVazio}</p>
+      </div>
+    </div>
+  ) : (
+    <div class="em-breve">
+      <span class="em-breve-titulo">Em breve</span>
+      <p>{m.textoEmBreve}</p>
+    </div>
+  )}
+</section>

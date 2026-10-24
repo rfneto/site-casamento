@@ -2,7 +2,10 @@
 // Página única do site. Os textos vêm de src/data/casamento.ts.
 // Identidade visual: as cangas que a Ilma fez para os convidados.
 import '../styles/global.css';
-import Foto from '../components/Foto.astro';
+import Historia from '../components/Historia.astro';
+import Resort from '../components/Resort.astro';
+import ComoChegar from '../components/ComoChegar.astro';
+import Mural from '../components/Mural.astro';
 import Ilustracao from '../components/Ilustracao.astro';
 import TituloSecao from '../components/TituloSecao.astro';
 import { casamento as c } from '../data/casamento';
@@ -12,21 +15,33 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const { noivos, data, local } = c;
 
 const textoData = data.confirmada ? data.textoConfirmado : data.textoProvisorio;
+// "Terça-feira, 11 de maio de 2027" → quebra de linha só depois da vírgula
+const partesData = textoData.split(/,\s*/);
 const mostrarHotel = local.hotelConfirmado && local.hotel.nome.trim() !== '';
-const dias = c.programacao.dias;
+const dias = c.programacao.dias as import('../data/casamento').Dia[];
 const alvo = new Date(data.cerimonia).getTime();
 const diasFaltando = Math.max(0, Math.floor((alvo - Date.now()) / 86400000));
 
-// "Maio 2027", escrito na vertical como na canga
-const mes = new Intl.DateTimeFormat('pt-BR', { month: 'long', timeZone: 'America/Santo_Domingo' }).format(new Date(data.cerimonia));
-const dataCanga = `${mes.charAt(0).toUpperCase()}${mes.slice(1)} ${new Date(data.cerimonia).getFullYear()}`;
+// Programação: itens com `oculto: true` não aparecem
+const diasVisiveis = dias
+  .map((d) => ({ ...d, itens: d.itens.filter((it) => !it.oculto) }))
+  .filter((d) => d.itens.length > 0);
+
+// Fusos: horário da cerimônia em cada lugar, calculado a partir da data
+const horaEm = (zona: string) => {
+  const t = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: zona }).format(new Date(data.cerimonia));
+  return t.endsWith(':00') ? `${Number(t.slice(0, 2))}h` : t.replace(':', 'h');
+};
+const fusos = c.viagem.fusos.lugares.map((l) => ({ ...l, hora: horaEm(l.zona) }));
 
 const menu = [
   { href: '#historia', texto: 'História' },
   { href: '#casamento', texto: 'Casamento' },
+  { href: '#resort', texto: mostrarHotel ? 'Resort' : 'Hospedagem' },
   { href: '#programacao', texto: 'Programação' },
+  { href: '#voos', texto: 'Voos' },
   { href: '#viagem', texto: 'Viagem' },
-  { href: '#hospedagem', texto: 'Hospedagem' },
+  { href: '#mural', texto: 'Mural' },
   { href: '#duvidas', texto: 'Dúvidas' },
   ...(c.presentes.ligada ? [{ href: '#presentes', texto: 'Presentes' }] : []),
 ];
@@ -95,22 +110,15 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
       </div>
       <div class="canga-data" aria-hidden="true">
         <Ilustracao nome="estrela-do-mar" class="estrela-gira" largura={240} altura={231} carregar="eager" />
-        <span>{dataCanga}</span>
       </div>
 
       <div class="canga-centro">
         <h1 class="nomes surge">{noivos.primeiro} <span class="e">&amp;</span> {noivos.segundo}</h1>
 
         <div class="canga-painel surge-2">
-          <p class="linha-evento">
-            <span>{c.abertura.chamada}</span>
-            <span aria-hidden="true">·</span>
-            {mostrarHotel && <><span>{local.hotel.nome}</span><span aria-hidden="true">·</span></>}
-            <span>{local.cidade}, {local.pais}</span>
-            <span aria-hidden="true">·</span>
-            <span>{textoData}</span>
-            <span aria-hidden="true">·</span>
-            <span>{c.evento.cerimonia.horario}</span>
+          <p class="quando">
+            <span class="quando-data">{partesData.map((t, i) => <>{i > 0 && ' '}<span class="nw">{t}{i < partesData.length - 1 ? ',' : ` · ${c.evento.cerimonia.horario}`}</span></>)}</span>
+            <span class="quando-local">{mostrarHotel && <>{local.hotel.nome} · </>}{local.cidade}, {local.pais}</span>
           </p>
 
           <ul class="contagem" data-contagem data-alvo={data.cerimonia} aria-label="Contagem regressiva para a cerimônia">
@@ -143,22 +151,7 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
     </section>
 
     <!-- ================= NOSSA HISTÓRIA ================= -->
-    <section id="historia" class="container secao historia revela">
-      <div class="historia-texto">
-        <TituloSecao>{c.historia.titulo}</TituloSecao>
-        {c.historia.paragrafos.map((p) => <p>{p}</p>)}
-      </div>
-      <ul class="polaroides">
-        {c.fotos.historia.map((f) => (
-          <li>
-            <figure>
-              <Foto arquivo={f.arquivo} alt={f.alt} />
-              <figcaption>{f.legenda}</figcaption>
-            </figure>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <Historia />
 
     <div class="faixa-listras" aria-hidden="true"></div>
 
@@ -186,16 +179,21 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
 
     <div class="faixa-listras" aria-hidden="true"></div>
 
+    <!-- ================= O RESORT ================= -->
+    <Resort />
+
+    <div class="faixa-listras" aria-hidden="true"></div>
+
     <!-- ================= PROGRAMAÇÃO ================= -->
     <section id="programacao" class="container secao programacao revela">
       <div>
         <TituloSecao>Programação</TituloSecao>
         <p class="suave sem-margem">
-          {dias.length ? 'Nosso itinerário, dia a dia. Toque em cada dia para ver os horários.' : 'O itinerário dos dias em Punta Cana vai morar aqui.'}
+          {diasVisiveis.length ? `Nosso itinerário, dia a dia. Toque em cada dia para ver os horários. ${c.programacao.nota}` : 'O itinerário dos dias em Punta Cana vai morar aqui.'}
         </p>
-        {dias.length > 0 && (
+        {diasVisiveis.length > 0 && (
           <div class="abas" role="tablist" aria-label="Dias da programação" data-abas>
-            {dias.map((d, i) => (
+            {diasVisiveis.map((d, i) => (
               <button class="aba" role="tab" id={`aba-${i}`} aria-controls={`dia-${i}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{d.aba}</button>
             ))}
           </div>
@@ -203,17 +201,18 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
         <Ilustracao nome="espreguicadeira" class="cadeira-programacao" largura={420} altura={425} />
       </div>
 
-      {dias.length > 0 ? (
+      {diasVisiveis.length > 0 ? (
         <div class="itinerario">
-          {dias.map((d, i) => (
+          {diasVisiveis.map((d, i) => (
             <div role="tabpanel" id={`dia-${i}`} aria-labelledby={`aba-${i}`} hidden={i !== 0} tabindex="0">
               <h3>{d.titulo}</h3>
+              {d.aviso && <p class="dia-aviso">{d.aviso}</p>}
               <ol>
                 {d.itens.map((it) => (
                   <li>
                     <span class="hora">{it.horario}</span>
                     <span>
-                      <span class="ativ">{it.atividade}</span>
+                      <span class="ativ">{it.atividade}{it.aConfirmar && <span class="a-confirmar">a confirmar</span>}</span>
                       <span class="det">{[it.local, it.observacao].filter(Boolean).join(' · ')}</span>
                     </span>
                   </li>
@@ -229,6 +228,11 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
         </div>
       )}
     </section>
+
+    <div class="faixa-listras" aria-hidden="true"></div>
+
+    <!-- ================= COMO CHEGAR ================= -->
+    <ComoChegar />
 
     <div class="faixa-listras" aria-hidden="true"></div>
 
@@ -259,7 +263,7 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
                 <span class="txt">{q.texto}</span>
               </span>
             </button>
-            {q.link && <a class="check-link" href={q.link.url} target="_blank" rel="noopener">{q.link.texto} ↗</a>}
+            {q.link && <a class="botao botao-indigo check-link" href={q.link.url} target="_blank" rel="noopener" hreflang="pt">{q.link.texto}</a>}
           </li>
         ))}
       </ul>
@@ -269,6 +273,36 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
           <div class="info"><dt>{i.rotulo}</dt><dd>{i.texto}</dd></div>
         ))}
       </dl>
+
+      <div class="viagem-caixas">
+        <article class="caixa">
+          <h3>{c.viagem.fusos.titulo}</h3>
+          <p>{c.viagem.fusos.texto}</p>
+          <table class="tabela">
+            <caption class="so-leitor">Horário da cerimônia em cada fuso</caption>
+            <thead><tr><th scope="col">Lugar</th><th scope="col">Cerimônia</th></tr></thead>
+            <tbody>
+              {fusos.map((f) => (
+                <tr><th scope="row">{f.nome}<small>{f.descricao}</small></th><td>{f.hora}</td></tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="caixa-exemplo">Exemplo: cerimônia às {fusos.map((f) => `${f.hora} ${f.nome === 'Punta Cana' ? 'em Punta Cana' : f.nome === 'Itália' ? 'na Itália' : `em ${f.nome}`}`).join(' = ')}.</p>
+        </article>
+
+        <article class="caixa">
+          <h3>{c.viagem.gorjetas.titulo}</h3>
+          <p>{c.viagem.gorjetas.texto}</p>
+          <table class="tabela">
+            <caption>{c.viagem.gorjetas.tabelaTitulo}</caption>
+            <tbody>
+              {c.viagem.gorjetas.tabela.map((g) => (
+                <tr><th scope="row">{g.quem}</th><td>{g.quanto}{g.obs && <small>{g.obs}</small>}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </article>
+      </div>
 
       <p class="fontes">
         Conferido em {c.viagem.dataChecagem}. Fontes oficiais:{' '}
@@ -280,20 +314,8 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
 
     <div class="faixa-listras" aria-hidden="true"></div>
 
-    <!-- ================= HOSPEDAGEM ================= -->
-    <section id="hospedagem" class="container secao revela">
-      <TituloSecao>{c.hospedagem.titulo}</TituloSecao>
-      <div class="hospedagem">
-        <Foto arquivo={c.fotos.hospedagem.arquivo} alt={c.fotos.hospedagem.alt} />
-        <div class="hospedagem-texto">
-          <span class="etiqueta">All-inclusive · pé na areia</span>
-          {mostrarHotel && <span class="hotel-nome">{local.hotel.nome}</span>}
-          {mostrarHotel && local.hotel.regiao && <span class="suave">{local.hotel.regiao}, {local.cidade}</span>}
-          <p>{mostrarHotel ? c.hospedagem.textoConfirmado : c.hospedagem.texto}</p>
-          {mostrarHotel && local.hotel.site && <a href={local.hotel.site} target="_blank" rel="noopener">Site do hotel ↗</a>}
-        </div>
-      </div>
-    </section>
+    <!-- ================= MURAL ================= -->
+    <Mural />
 
     <div class="faixa-listras" aria-hidden="true"></div>
 

@@ -1,0 +1,55 @@
+---
+// "Nossa história": capítulos em cartões clicáveis que abrem num painel com a
+// foto grande e o texto. Os capítulos vêm de `historia.capitulos`.
+import TituloSecao from './TituloSecao.astro';
+import { casamento as c } from '../data/casamento';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const capitulos = c.historia.capitulos.map((cap) => ({ ...cap, foto: base + cap.foto }));
+---
+<section id="historia" class="container secao revela">
+  <TituloSecao>{c.historia.titulo}</TituloSecao>
+  <p class="sem-margem">{c.historia.intro}</p>
+
+  <ul class="capitulos" data-capitulos>
+    {capitulos.map((cap, i) => (
+      <li>
+        <button type="button" class="capitulo" data-capitulo={i} aria-haspopup="dialog">
+          <img src={cap.foto} alt={cap.alt} loading="lazy" decoding="async" width="900" height="1125" />
+          <span class="capitulo-legenda">{cap.legenda}</span>
+          <span class="so-leitor">— abrir capítulo {i + 1} de {capitulos.length}</span>
+        </button>
+      </li>
+    ))}
+  </ul>
+
+  <dialog class="modal-historia" aria-labelledby="modal-historia-titulo" data-modal-historia>
+    <div class="modal-caixa">
+      <button type="button" class="modal-fechar" data-fechar aria-label="Fechar">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+      <figure class="modal-figura">
+        <img data-modal-foto src="" alt="" />
+      </figure>
+      <div class="modal-texto" aria-live="polite">
+        <p class="modal-contador" data-modal-contador></p>
+        <h3 id="modal-historia-titulo" data-modal-titulo></h3>
+        <p class="modal-data" data-modal-data></p>
+        <p data-modal-corpo></p>
+        <div class="modal-setas">
+          <button type="button" class="botao botao-contorno" data-anterior aria-label="Capítulo anterior">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+            Anterior
+          </button>
+          <button type="button" class="botao botao-indigo" data-proximo aria-label="Próximo capítulo">
+            Próximo
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+        <p class="modal-dica">No celular, arraste a foto para o lado para trocar de capítulo.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="application/json" id="capitulos-dados" set:html={JSON.stringify(capitulos).replace(/</g, '\\u003c')} />
+</section>

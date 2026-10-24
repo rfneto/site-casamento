@@ -116,12 +116,17 @@ o mural mostra "Em breve" e o formulário fica escondido.
    [`supabase/migrations/001_historias.sql`](supabase/migrations/001_historias.sql)
    e clique em **Run**. Isso cria a tabela, as regras de segurança e o local
    das fotos.
-3. Em **Project Settings → API** (ou **Data API** / **API Keys**), copie a
-   **Project URL** e a chave **anon public**. **Nunca** use a chave
-   `service_role` no site.
+3. Copie a **Project URL** (Project Settings → **Data API**, ou botão
+   **Connect**; formato `https://xxxx.supabase.co`, sem `/rest/v1`) e a chave
+   pública: em Project Settings → **API Keys**, a **Publishable key**
+   (`sb_publishable_...`) ou, na aba *Legacy*, a **anon public** (`eyJ...`).
+   As duas funcionam. **Nunca** use a **Secret key** (`sb_secret_...`) nem a
+   `service_role`: elas ignoram as regras de segurança.
 4. Na Vercel: projeto → **Settings → Environment Variables** → adicione
-   `PUBLIC_SUPABASE_URL` (a URL) e `PUBLIC_SUPABASE_ANON_KEY` (a chave anon),
-   marcando *Production*.
+   `PUBLIC_SUPABASE_URL` (a URL) e `PUBLIC_SUPABASE_ANON_KEY` (a chave
+   pública, publishable ou anon), marcando *Production* (e *Preview*, se
+   quiser testar em prévias). Pode deixar *Sensitive* desligado: essa chave já
+   fica visível no site de qualquer jeito.
 5. Em **Deployments**, no último → **⋯ → Redeploy**. O formulário aparece.
 
 **Aprovar uma história (3 passos):**

@@ -341,87 +341,133 @@ export const casamento = {
   // COMO CHEGAR (voos)
   // ---------------------------------------------------------------------------
   // Pesquisa do Ruy em 24/10/2026, ida e volta por pessoa, tarifa básica sem
-  // mala despachada. Horários sempre no fuso local de cada aeroporto. Sem
-  // links de compra de terceiros: cada um confirma no site da companhia.
+  // mala despachada. Horários SEMPRE no fuso local de cada aeroporto
+  // (Punta Cana UTC−4; São Paulo/Vitória UTC−3; Milão, Zurique, Frankfurt e
+  // Madri UTC+2 em maio). Os tempos de viagem foram calculados a partir desses
+  // horários e fusos. Sem links de compra de terceiros.
+  // Regra: nenhuma opção com escala nos EUA ou no Canadá (exigem visto).
+  //
+  // Cada cidade tem:
+  //   recomendado  → aparece em destaque (chega até o meio-dia de 10/05)
+  //   alternativas → aparecem embaixo
+  //   volta        → voo de volta sugerido
+  //   avisos       → observações
+  // Cada voo: companhia, rota, trechos (dia e horários), duracao, preco, nota.
   comoChegar: {
     titulo: 'Como chegar',
-    prazo: 'Todos precisam estar em Punta Cana (aeroporto PUJ) até segunda, 10/05/2027.',
-    aviso: 'Pesquisa de 24/10/2026, ida e volta por pessoa, tarifa básica sem mala despachada. Preços e horários mudam; confirme no site da companhia.',
+    prazo: 'Meta: todo mundo em Punta Cana (aeroporto PUJ) até o meio-dia de segunda, 10/05/2027, a tempo do check-in das 15h.',
+    aviso: 'Pesquisa de 24/10/2026, ida e volta por pessoa, tarifa básica sem mala despachada. Preços e horários mudam; confirme no site da companhia. Todas as opções evitam escala nos EUA e no Canadá, que exigem visto.',
     cidades: [
       {
         cidade: 'São Paulo',
         aeroporto: 'GRU',
-        opcoes: [
+        recomendado: {
+          companhia: 'Arajet',
+          rota: 'Voo direto Guarulhos → Punta Cana',
+          trechos: ['Seg 10/05 · Guarulhos 05h25 → Punta Cana 11h30'],
+          duracao: 'cerca de 7h',
+          preco: 'Cerca de R$ 2.500',
+        },
+        alternativas: [
           {
             companhia: 'Arajet',
-            rota: 'Voo direto Guarulhos → Punta Cana',
+            rota: 'Voo direto, um dia antes (mais barato)',
+            trechos: ['Dom 09/05 · Guarulhos 04h10 → Punta Cana 10h15'],
             duracao: 'cerca de 7h',
-            horarios: [
-              'Ida: dom 09/05, 04h10 → 10h15',
-              'ou seg 10/05, 05h25 → 11h30 (horário de Punta Cana)',
-              'Volta: qui 13/05, 19h00 → sex 14/05, 03h10 em Guarulhos',
-            ],
-            preco: 'A partir de cerca de R$ 2.050',
-          },
-          {
-            companhia: 'Avianca',
-            rota: 'Via Bogotá',
-            duracao: 'cerca de 10h',
-            horarios: ['Ida: 07h35 → 16h45, sáb 08, dom 09 ou seg 10/05'],
-            preco: 'Cerca de R$ 2.600',
+            preco: 'Cerca de R$ 2.050',
           },
         ],
+        volta: {
+          companhia: 'Arajet',
+          rota: 'Voo direto Punta Cana → Guarulhos',
+          trechos: ['Qui 13/05 · Punta Cana 19h00 → Guarulhos 03h10 de sexta (14/05)'],
+          duracao: 'cerca de 7h',
+          preco: '',
+        },
         avisos: [] as string[],
       },
       {
         cidade: 'Vitória',
         aeroporto: 'VIX',
-        opcoes: [
-          {
-            companhia: 'Doméstico + Arajet',
-            rota: 'Vitória → Guarulhos → Punta Cana (não há voo direto)',
-            duracao: 'noite em Guarulhos + cerca de 7h',
-            horarios: [
-              'Ida: voo doméstico até Guarulhos na noite de sáb 08/05 e Arajet direto dom 09/05, 04h10',
-              'Volta: Arajet até Guarulhos (chega sex 14/05, 03h10) e voo para Vitória de manhã',
-            ],
-            preco: 'Cerca de R$ 2.800 a 3.300 no total',
-          },
-        ],
+        recomendado: {
+          companhia: 'Doméstico + Arajet',
+          rota: 'Sair de Vitória no domingo e voar para Punta Cana na segunda cedo, no mesmo Arajet de São Paulo',
+          trechos: [
+            'Dom 09/05 · Vitória → Guarulhos: Gol 11h00 → 12h35 ou 18h55 → 20h35 (Azul e LATAM também operam; compare)',
+            'Noite em Guarulhos (hotel no aeroporto)',
+            'Seg 10/05 · Arajet Guarulhos 05h25 → Punta Cana 11h30',
+          ],
+          duracao: 'cerca de 1h40 + 7h, com uma noite em Guarulhos',
+          preco: 'Guarulhos–Punta Cana: cerca de R$ 2.500 ida e volta. O trecho doméstico varia muito (na pesquisa, a Gol saiu cara: cerca de R$ 1.450 só a ida). Compare Gol, Azul e LATAM direto no site das companhias.',
+        },
+        alternativas: [] as Voo[],
+        volta: {
+          companhia: 'Arajet + Gol',
+          rota: 'Punta Cana → Guarulhos → Vitória',
+          trechos: [
+            'Qui 13/05 · Arajet Punta Cana 19h00 → Guarulhos 03h10 de sexta (14/05)',
+            'Sex 14/05 · Gol Guarulhos 08h45 → Vitória 10h15',
+          ],
+          duracao: 'cerca de 7h + 1h30, com espera em Guarulhos',
+          preco: '',
+        },
         avisos: [
-          'Evite combinações que chegam em Campinas e saem de Guarulhos (troca de aeroporto de madrugada).',
-          'Evite voos que só chegam no dia 11, o dia do casamento.',
+          'Como os trechos costumam ser comprados separados, a noite em Guarulhos é a folga caso o voo doméstico atrase.',
+          'Evite combinações que chegam em Campinas e saem de Guarulhos.',
         ],
       },
       {
         cidade: 'Milão',
         aeroporto: 'MXP',
-        opcoes: [
+        // Voo direto: não havia para maio na pesquisa de 24/10/2026. O Neos já
+        // operou Milão–Punta Cana direto em algumas temporadas. Se aparecer para
+        // maio de 2027, preencha abaixo e troque `disponivel` para true: ele
+        // entra como primeira opção, acima do recomendado.
+        direto: {
+          disponivel: false,
+          companhia: 'Neos',
+          rota: 'Voo direto Milão → Punta Cana',
+          trechos: [] as string[],
+          duracao: '',
+          preco: '',
+        },
+        nota: 'Não há voo direto Milão–Punta Cana em maio (pesquisa de 24/10/2026). Os voos da Europa chegam a Punta Cana à tarde ou à noite; para estar lá antes do meio-dia de 10/05, é preciso chegar no domingo, 09/05.',
+        recomendado: {
+          companhia: 'Swiss',
+          rota: 'Via Zurique',
+          trechos: ['Dom 09/05 · Milão 10h35 → Zurique 11h35 → Punta Cana 17h25 (mesmo dia)'],
+          duracao: 'cerca de 12h50, com a conexão',
+          preco: 'Cerca de € 1.375',
+        },
+        alternativas: [
           {
-            companhia: 'Air Europa',
-            rota: 'Via Madri',
-            duracao: 'cerca de 14h35, com a conexão',
-            horarios: [
-              'Ida: seg 10/05, Milão 10h50 → Madri 13h15 → Punta Cana 19h25',
-              'Volta: sex 14/05, 21h20 → Madri 11h25 de sábado → Milão',
-            ],
-            preco: 'Cerca de € 1.160 a 1.220',
+            companhia: 'Lufthansa',
+            rota: 'Via Frankfurt',
+            trechos: ['Sáb 08/05 · Milão 08h55 → Punta Cana 16h00'],
+            duracao: 'cerca de 13h05, com a conexão',
+            preco: 'Cerca de € 1.440',
           },
           {
-            companhia: 'Iberia + Iberojet',
-            rota: 'Via Madri',
-            duracao: 'cerca de 14h20, com a conexão',
-            horarios: ['Ida: seg 10/05, 10h25 → 18h45'],
-            preco: 'Cerca de € 1.160 a 1.220',
+            companhia: 'Condor',
+            rota: 'Via Frankfurt',
+            trechos: ['Sáb 08/05 · Milão 11h55 → Punta Cana 18h30'],
+            duracao: 'cerca de 12h35, com a conexão',
+            preco: 'Cerca de € 1.480',
           },
         ],
+        volta: {
+          companhia: 'Air Europa',
+          rota: 'Via Madri',
+          trechos: ['Sex 14/05 · Punta Cana 21h20 → Madri 11h25 de sábado → Milão 17h25'],
+          duracao: 'cerca de 14h05, com a conexão',
+          preco: '',
+        },
         avisos: [
-          'Chegar no próprio dia 10 à noite deixa pouca folga; se der, chegue em 09/05.',
-          'Prefira um bilhete único com a conexão em Madri, em vez de bilhetes separados.',
+          'A volta sem escala nos EUA só saiu no dia 14: quem vem de Milão precisa de uma noite a mais no hotel (13 para 14/05) ou de um day use até o voo.',
           'Com passaporte europeu também se entra sem visto e se faz o E-Ticket. A vacina de febre amarela só é exigida de quem chega do Brasil (SP, RJ, MG ou ES).',
         ],
       },
-    ],
+    ] as CidadeVoo[],
   },
 
   // ---------------------------------------------------------------------------
@@ -529,4 +575,10 @@ export type ItemProgramacao = {
   aConfirmar?: boolean; oculto?: boolean;
 };
 export type Dia = { aba: string; titulo: string; aviso?: string; itens: ItemProgramacao[] };
+export type Voo = { companhia: string; rota: string; trechos: string[]; duracao: string; preco: string };
+export type CidadeVoo = {
+  cidade: string; aeroporto: string;
+  direto?: Voo & { disponivel: boolean }; nota?: string;
+  recomendado: Voo; alternativas: Voo[]; volta?: Voo; avisos: string[];
+};
 export type Capitulo = { foto: string; alt: string; legenda: string; titulo: string; data?: string; texto: string };

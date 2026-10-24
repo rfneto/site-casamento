@@ -6,10 +6,10 @@ Site estático (Astro), uma página só, com menu fixo. O visual é o das cangas
 que a Ilma fez para os convidados: listras de aquarela azul, nomes em letra de
 pincel índigo, coqueiro, espreguiçadeiras e estrela-do-mar.
 
-Seções: abertura (canga com data, resort e contagem regressiva) · Nossa
-história (capítulos) · O casamento · O resort · Programação · Como chegar
-(voos) · Para entrar em Punta Cana (checklist, fusos e gorjetas) · Histórias
-com a gente (mural) · Perguntas frequentes · Presentes (desligada).
+Seções, nesta ordem: abertura (canga com data, resort e contagem regressiva)
+· Nossa história (capítulos) · Histórias com a gente (mural) · O casamento ·
+O resort · Programação · Como chegar (voos) · Para entrar em Punta Cana
+(checklist, fusos e gorjetas) · Perguntas frequentes · Presentes (desligada).
 
 Fica fora dos buscadores
 (`noindex, nofollow` na página, no cabeçalho `X-Robots-Tag` da Vercel e no `robots.txt`), mas qualquer pessoa com o link abre.
@@ -87,7 +87,9 @@ e hora, ajuste o item e troque para `oculto: false`.
 ## Voos, fusos e gorjetas
 
 Tudo em `casamento.ts`: `comoChegar` (um cartão por cidade de saída, com
-opções, horários, preço e avisos), `viagem.fusos` (o exemplo de horário é
+`recomendado` em destaque, `alternativas`, `volta` e `avisos`; em Milão há um
+bloco `direto` para o Neos: preencha e troque `disponivel` para `true` se o voo
+direto aparecer para maio de 2027, e ele vira a primeira opção), `viagem.fusos` (o exemplo de horário é
 calculado sozinho a partir da data da cerimônia) e `viagem.gorjetas` (texto e
 tabela). As fontes e a data da pesquisa estão nos comentários.
 

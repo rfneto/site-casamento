@@ -1,9 +1,19 @@
 ---
-// "Como chegar": um cartão por cidade de saída, com as opções de voo.
+// "Como chegar": um cartão por cidade de saída, com a opção recomendada em
+// destaque (chega até o meio-dia de 10/05), as alternativas e a volta.
 import TituloSecao from './TituloSecao.astro';
 import { casamento as c } from '../data/casamento';
+import type { Voo } from '../data/casamento';
 
 const cc = c.comoChegar;
+const blocos = (cid: (typeof cc.cidades)[number]) => {
+  const lista: { rotulo: string; voo: Voo; destaque?: boolean }[] = [];
+  if (cid.direto?.disponivel) lista.push({ rotulo: 'Voo direto', voo: cid.direto, destaque: true });
+  lista.push({ rotulo: 'Recomendado', voo: cid.recomendado, destaque: !cid.direto?.disponivel });
+  cid.alternativas.forEach((v) => lista.push({ rotulo: 'Alternativa', voo: v }));
+  if (cid.volta) lista.push({ rotulo: 'Volta', voo: cid.volta });
+  return lista;
+};
 ---
 <section id="voos" class="container secao revela">
   <TituloSecao>{cc.titulo}</TituloSecao>
@@ -16,13 +26,18 @@ const cc = c.comoChegar;
     {cc.cidades.map((cid) => (
       <article class="voo-cidade">
         <h3><span class="voo-cod">{cid.aeroporto}</span> {cid.cidade} <span class="voo-seta" aria-hidden="true">→</span> <span class="voo-cod">PUJ</span><span class="so-leitor"> Punta Cana</span></h3>
-        {cid.opcoes.map((o) => (
-          <div class="voo-opcao">
-            <p class="voo-cia">{o.companhia} <span>· {o.rota}</span></p>
-            <p class="voo-meta"><span>Tempo: {o.duracao}</span><span class="voo-preco">{o.preco}</span></p>
+        {cid.nota && <p class="voo-nota">{cid.nota}</p>}
+        {blocos(cid).map(({ rotulo, voo, destaque }) => (
+          <div class:list={['voo-opcao', { destaque, volta: rotulo === 'Volta' }]}>
+            <p class="voo-rotulo">{rotulo}</p>
+            <p class="voo-cia">{voo.companhia} <span>· {voo.rota}</span></p>
             <ul class="voo-horarios">
-              {o.horarios.map((t) => <li>{t}</li>)}
+              {voo.trechos.map((t) => <li>{t}</li>)}
             </ul>
+            <p class="voo-meta">
+              {voo.duracao && <span>Tempo: {voo.duracao}</span>}
+              {voo.preco && <span class="voo-preco">{voo.preco}</span>}
+            </p>
           </div>
         ))}
         {cid.avisos.length > 0 && (

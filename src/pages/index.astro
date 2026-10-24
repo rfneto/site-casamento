@@ -36,12 +36,12 @@ const fusos = c.viagem.fusos.lugares.map((l) => ({ ...l, hora: horaEm(l.zona) })
 
 const menu = [
   { href: '#historia', texto: 'História' },
+  { href: '#mural', texto: 'Mural' },
   { href: '#casamento', texto: 'Casamento' },
   { href: '#resort', texto: mostrarHotel ? 'Resort' : 'Hospedagem' },
   { href: '#programacao', texto: 'Programação' },
   { href: '#voos', texto: 'Voos' },
   { href: '#viagem', texto: 'Viagem' },
-  { href: '#mural', texto: 'Mural' },
   { href: '#duvidas', texto: 'Dúvidas' },
   ...(c.presentes.ligada ? [{ href: '#presentes', texto: 'Presentes' }] : []),
 ];
@@ -152,6 +152,11 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
 
     <!-- ================= NOSSA HISTÓRIA ================= -->
     <Historia />
+
+    <div class="faixa-listras" aria-hidden="true"></div>
+
+    <!-- ================= HISTÓRIAS COM A GENTE (mural) ================= -->
+    <Mural />
 
     <div class="faixa-listras" aria-hidden="true"></div>
 
@@ -311,11 +316,6 @@ const ogImagem = new URL('og.jpg', c.seo.url).toString();
         ))}. {c.viagem.aviso}
       </p>
     </section>
-
-    <div class="faixa-listras" aria-hidden="true"></div>
-
-    <!-- ================= MURAL ================= -->
-    <Mural />
 
     <div class="faixa-listras" aria-hidden="true"></div>
 

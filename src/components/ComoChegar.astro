@@ -26,6 +26,7 @@ const blocos = (cid: (typeof cc.cidades)[number]) => {
     {cc.cidades.map((cid) => (
       <article class="voo-cidade">
         <h3><span class="voo-cod">{cid.aeroporto}</span> {cid.cidade} <span class="voo-seta" aria-hidden="true">→</span> <span class="voo-cod">PUJ</span><span class="so-leitor"> Punta Cana</span></h3>
+        <p class="voo-pesquisa">Pesquisa de {cid.pesquisa}</p>
         {cid.nota && <p class="voo-nota">{cid.nota}</p>}
         {blocos(cid).map(({ rotulo, voo, destaque }) => (
           <div class:list={['voo-opcao', { destaque, volta: rotulo === 'Volta' }]}>

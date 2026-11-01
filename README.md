@@ -93,6 +93,21 @@ direto aparecer para maio de 2027, e ele vira a primeira opção), `viagem.fusos
 calculado sozinho a partir da data da cerimônia) e `viagem.gorjetas` (texto e
 tabela). As fontes e a data da pesquisa estão nos comentários.
 
+### Atualização semanal dos voos
+
+Uma tarefa agendada no Claude (**"Voos do casamento"**, toda segunda às 7h44,
+horário de Brasília) refaz a pesquisa no Kiwi.com para São Paulo, Vitória e
+Milão, atualiza preços e horários em `comoChegar` (e a data "Pesquisa de" de
+cada cidade), roda o build e faz push neste branch, o que republica o site.
+Ela nunca coloca escala nos EUA/Canadá nem links de compra, e não inventa
+voo: se um sumir, ela mantém e marca "Voo não encontrado".
+
+- Para a tarefa funcionar, ela precisa do conector **Kiwi.com**: no claude.ai,
+  abra a lista de tarefas agendadas → "Voos do casamento" → editar → adicione
+  o conector Kiwi.com.
+- Para pausar ou apagar: na mesma tela, desligue ou exclua a tarefa.
+- Depois de 09/05/2027 ela não altera mais nada.
+
 ## Como confirmar a data e o hotel
 
 - **Data:** em `data`, ajuste `cerimonia` (formato `2027-05-11T17:00:00-04:00`,

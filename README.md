@@ -96,23 +96,27 @@ tabela). As fontes e a data da pesquisa estão nos comentários.
 ### Atualização semanal dos voos
 
 Uma tarefa agendada no Claude (**"Voos do casamento"**, toda segunda às 7h44,
-horário de Brasília) refaz a pesquisa para São Paulo, Vitória e Milão — de
-preferência no **Google Flights**; se o Google estiver bloqueado, no Kiwi.com —,
-atualiza preços e horários em `comoChegar`, a "Última atualização dos voos"
-e a linha "Pesquisa de … · fonte" de cada cidade, roda o build e faz push
-neste branch, o que republica o site.
+horário de Brasília) refaz a pesquisa para São Paulo, Vitória e Milão,
+atualiza preços, horários e números de voo em `comoChegar`, a "Última
+atualização dos voos" e a linha "Pesquisa de … · fonte" de cada cidade, roda o
+build e faz push neste branch, o que republica o site. Nunca coloca escala
+nos EUA/Canadá nem links de compra, e não inventa voo: se um sumir, ela mantém
+e marca "Voo não encontrado". Depois de 09/05/2027 ela não altera mais nada.
 
-- Para usar o Google Flights, o ambiente na nuvem do Claude precisa liberar
-  `www.google.com` no acesso à rede (menu do ambiente → **Edit** →
-  **Network access** → *Allowed domains*).
-Ela nunca coloca escala nos EUA/Canadá nem links de compra, e não inventa
-voo: se um sumir, ela mantém e marca "Voo não encontrado".
+Fontes, nesta ordem (só fontes legítimas, sem contornar bloqueio do Google):
 
-- Para o plano B (Kiwi.com), a tarefa precisa do conector **Kiwi.com**: no
-  claude.ai, abra a lista de tarefas agendadas → "Voos do casamento" →
-  editar → adicione o conector Kiwi.com.
-- Para pausar ou apagar: na mesma tela, desligue ou exclua a tarefa.
-- Depois de 09/05/2027 ela não altera mais nada.
+1. **Google Flights via SerpApi** (dados reais do Google Flights por API).
+   Crie uma conta em serpapi.com, copie a chave e guarde-a no ambiente na
+   nuvem do Claude (menu do ambiente → **Edit** → *Network secrets* ou
+   variável de ambiente) com o nome `SERPAPI_API_KEY`. Libere também o
+   domínio `serpapi.com` no acesso à rede. Cada execução usa no máximo 15
+   buscas.
+2. **Kiwi.com**, se a SerpApi não estiver configurada: no claude.ai, em
+   tarefas agendadas → "Voos do casamento" → editar → adicione o conector
+   Kiwi.com.
+
+Sem nenhuma das duas, a tarefa só avisa e não muda o site. Para pausar ou
+apagar, use a mesma tela de tarefas agendadas.
 
 ## Como confirmar a data e o hotel
 

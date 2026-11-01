@@ -356,6 +356,11 @@ export const casamento = {
   //  • 01/11/2026 — Kiwi.com: São Paulo, Vitória e Milão (ida e volta com
   //    volta em 13/05). Horário do Edelweiss WK34 Zurique → Punta Cana
   //    (13h15–13h50 em 2026): flightmapper.net / flyedelweiss.com.
+  //  • 01/11/2026 — Google Flights: São Paulo (Arajet seg R$ 2.684, dom
+  //    R$ 2.467), Vitória–Guarulhos (R$ 800 Gol/LATAM), Milão ida dom 09/05 →
+  //    volta 13/05 (Swiss/Edelweiss € 924, conexão de 2h10 em Zurique) e volta
+  //    Punta Cana → Milão em 13/05 (nenhum Swiss/Edelweiss nesse dia; sem
+  //    EUA/Canadá só via Frankfurt). Condor não detalhada no Google.
   //
   // Cada cidade tem: pesquisa (data), recomendado (em destaque; chega até o
   // meio-dia de 10/05), alternativas, volta e avisos.
@@ -371,13 +376,13 @@ export const casamento = {
         cidade: 'São Paulo',
         aeroporto: 'GRU',
         pesquisa: '01/11/2026',
-        fonte: 'Kiwi.com',
+        fonte: 'Google Flights',
         recomendado: {
           companhia: 'Arajet',
           rota: 'Voo direto Guarulhos → Punta Cana',
           trechos: ['Seg 10/05 · Guarulhos 05h25 → Punta Cana 11h30'],
           duracao: 'cerca de 7h',
-          preco: 'Cerca de R$ 2.960 ida e volta (volta em 13/05)',
+          preco: 'Cerca de R$ 2.680 ida e volta (volta em 13/05)',
         },
         alternativas: [
           {
@@ -385,7 +390,7 @@ export const casamento = {
             rota: 'Voo direto, um dia antes (mais barato)',
             trechos: ['Dom 09/05 · Guarulhos 04h10 → Punta Cana 10h15'],
             duracao: 'cerca de 7h',
-            preco: 'Cerca de R$ 2.500 ida e volta (volta em 13/05)',
+            preco: 'Cerca de R$ 2.470 ida e volta (volta em 13/05)',
           },
         ],
         volta: {
@@ -401,17 +406,17 @@ export const casamento = {
         cidade: 'Vitória',
         aeroporto: 'VIX',
         pesquisa: '01/11/2026',
-        fonte: 'Kiwi.com',
+        fonte: 'Google Flights',
         recomendado: {
-          companhia: 'Gol + Arajet',
+          companhia: 'Gol ou LATAM + Arajet',
           rota: 'Sair de Vitória no domingo e voar para Punta Cana na segunda cedo, no mesmo Arajet de São Paulo',
           trechos: [
-            'Dom 09/05 · Vitória → Guarulhos: Gol 11h00 → 12h35 ou 18h55 → 20h35 (Azul e LATAM também operam; compare)',
+            'Dom 09/05 · Vitória → Guarulhos: LATAM 09h40 → 11h20, Gol 11h00 → 12h35 ou Gol 18h55 → 20h35 (compare também a Azul)',
             'Noite em Guarulhos (hotel no aeroporto)',
             'Seg 10/05 · Arajet Guarulhos 05h25 → Punta Cana 11h30',
           ],
           duracao: 'cerca de 1h40 + 7h, com uma noite em Guarulhos',
-          preco: 'Cerca de R$ 3.800 no total: Gol Vitória–Guarulhos cerca de R$ 840 ida e volta + Arajet cerca de R$ 2.960 ida e volta.',
+          preco: 'Cerca de R$ 3.480 no total: Vitória–Guarulhos cerca de R$ 800 ida e volta (Gol ou LATAM) + Arajet cerca de R$ 2.680 ida e volta.',
         },
         alternativas: [] as Voo[],
         volta: {
@@ -433,7 +438,7 @@ export const casamento = {
         cidade: 'Milão',
         aeroporto: 'MXP',
         pesquisa: '01/11/2026',
-        fonte: 'Kiwi.com',
+        fonte: 'Kiwi.com e Google Flights',
         // Voo direto: não havia para maio nas pesquisas. O Neos já operou
         // Milão–Punta Cana direto em algumas temporadas. Se aparecer para maio
         // de 2027, preencha abaixo e troque `disponivel` para true: ele entra
@@ -459,14 +464,13 @@ export const casamento = {
         alternativas: [
           {
             companhia: 'Swiss / Edelweiss',
-            rota: 'Via Zurique (preço da pesquisa de 24/10/2026)',
+            rota: 'Via Zurique · mais barata e chega no domingo',
             trechos: [
-              'Dom 09/05 · Milão 10h35 → Zurique 11h35 → Punta Cana 17h25',
-              'Conexão em Zurique: o voo para Punta Cana sai por volta de 13h15–13h50, ou seja, cerca de 1h40 a 2h15 de espera. Dá tempo com bilhete único (há controle de passaporte; o recomendado é 60 a 90 minutos).',
-              'Volta: o voo Punta Cana → Zurique só opera em alguns dias da semana; a volta em 13/05 por Zurique não está confirmada. Confira no site da Swiss.',
+              'Dom 09/05 · Milão 10h35 → Zurique → Punta Cana 17h25 (conexão de 2h10 em Zurique; dá tempo com bilhete único: há controle de passaporte e o recomendado é 60 a 90 minutos)',
+              'Volta em 13/05: não há voo Swiss/Edelweiss saindo de Punta Cana nesse dia. A volta desse bilhete é por outra rota do grupo Lufthansa (por exemplo, via Frankfurt: Punta Cana 19h55 → Milão 13h55 de sexta). Confira a volta no site da Swiss antes de comprar.',
             ],
             duracao: 'cerca de 12h50, com a conexão',
-            preco: 'Cerca de € 1.375',
+            preco: 'Cerca de € 920 ida e volta (volta em 13/05)',
           },
         ],
         volta: {

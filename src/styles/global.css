@@ -617,6 +617,7 @@ h3 { font-size: 18px; font-weight: 700; line-height: 1.3; }
   background: var(--listra); color: var(--indigo-escuro);
 }
 .prazo svg { flex-shrink: 0; color: var(--indigo); }
+.voos-atualizado { margin: -10px 0 18px; font-size: 14px; }
 .voos { display: grid; gap: 16px; }
 @media (min-width: 980px) { .voos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .voo-cidade {

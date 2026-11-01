@@ -347,8 +347,9 @@ export const casamento = {
   // Sem links de compra de terceiros. Regra: nenhuma escala nos EUA/Canadá.
   //
   // ATUALIZAÇÃO SEMANAL: uma tarefa agendada (toda segunda de manhã) refaz a
-  // pesquisa no Kiwi.com, atualiza preços/horários aqui e a data em
-  // `pesquisa` de cada cidade, e republica o site. Veja o README.
+  // pesquisa — de preferência no Google Flights; se o Google estiver
+  // inacessível, no Kiwi.com —, atualiza preços/horários aqui, `atualizadoEm`,
+  // e `pesquisa`/`fonte` de cada cidade, e republica o site. Veja o README.
   //
   // Histórico das pesquisas:
   //  • 24/10/2026 — pesquisa do Ruy (sites das companhias).
@@ -361,6 +362,8 @@ export const casamento = {
   // Cada voo: companhia, rota, trechos (dia e horários), duracao, preco.
   comoChegar: {
     titulo: 'Como chegar',
+    // Data da última atualização dos voos (aparece no topo da seção).
+    atualizadoEm: '01/11/2026',
     prazo: 'Meta: todo mundo em Punta Cana (aeroporto PUJ) até o meio-dia de segunda, 10/05/2027, a tempo do check-in das 15h.',
     aviso: 'Preços de ida e volta por pessoa, tarifa básica sem mala despachada. Preços e horários mudam; confirme no site da companhia. Todas as opções evitam escala nos EUA e no Canadá, que exigem visto.',
     cidades: [
@@ -368,6 +371,7 @@ export const casamento = {
         cidade: 'São Paulo',
         aeroporto: 'GRU',
         pesquisa: '01/11/2026',
+        fonte: 'Kiwi.com',
         recomendado: {
           companhia: 'Arajet',
           rota: 'Voo direto Guarulhos → Punta Cana',
@@ -397,6 +401,7 @@ export const casamento = {
         cidade: 'Vitória',
         aeroporto: 'VIX',
         pesquisa: '01/11/2026',
+        fonte: 'Kiwi.com',
         recomendado: {
           companhia: 'Gol + Arajet',
           rota: 'Sair de Vitória no domingo e voar para Punta Cana na segunda cedo, no mesmo Arajet de São Paulo',
@@ -428,6 +433,7 @@ export const casamento = {
         cidade: 'Milão',
         aeroporto: 'MXP',
         pesquisa: '01/11/2026',
+        fonte: 'Kiwi.com',
         // Voo direto: não havia para maio nas pesquisas. O Neos já operou
         // Milão–Punta Cana direto em algumas temporadas. Se aparecer para maio
         // de 2027, preencha abaixo e troque `disponivel` para true: ele entra
@@ -586,7 +592,7 @@ export type ItemProgramacao = {
 export type Dia = { aba: string; titulo: string; aviso?: string; itens: ItemProgramacao[] };
 export type Voo = { companhia: string; rota: string; trechos: string[]; duracao: string; preco: string };
 export type CidadeVoo = {
-  cidade: string; aeroporto: string; pesquisa: string;
+  cidade: string; aeroporto: string; pesquisa: string; fonte?: string;
   direto?: Voo & { disponivel: boolean }; nota?: string;
   recomendado: Voo; alternativas: Voo[]; volta?: Voo; avisos: string[];
 };

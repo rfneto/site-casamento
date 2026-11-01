@@ -96,15 +96,21 @@ tabela). As fontes e a data da pesquisa estão nos comentários.
 ### Atualização semanal dos voos
 
 Uma tarefa agendada no Claude (**"Voos do casamento"**, toda segunda às 7h44,
-horário de Brasília) refaz a pesquisa no Kiwi.com para São Paulo, Vitória e
-Milão, atualiza preços e horários em `comoChegar` (e a data "Pesquisa de" de
-cada cidade), roda o build e faz push neste branch, o que republica o site.
+horário de Brasília) refaz a pesquisa para São Paulo, Vitória e Milão — de
+preferência no **Google Flights**; se o Google estiver bloqueado, no Kiwi.com —,
+atualiza preços e horários em `comoChegar`, a "Última atualização dos voos"
+e a linha "Pesquisa de … · fonte" de cada cidade, roda o build e faz push
+neste branch, o que republica o site.
+
+- Para usar o Google Flights, o ambiente na nuvem do Claude precisa liberar
+  `www.google.com` no acesso à rede (menu do ambiente → **Edit** →
+  **Network access** → *Allowed domains*).
 Ela nunca coloca escala nos EUA/Canadá nem links de compra, e não inventa
 voo: se um sumir, ela mantém e marca "Voo não encontrado".
 
-- Para a tarefa funcionar, ela precisa do conector **Kiwi.com**: no claude.ai,
-  abra a lista de tarefas agendadas → "Voos do casamento" → editar → adicione
-  o conector Kiwi.com.
+- Para o plano B (Kiwi.com), a tarefa precisa do conector **Kiwi.com**: no
+  claude.ai, abra a lista de tarefas agendadas → "Voos do casamento" →
+  editar → adicione o conector Kiwi.com.
 - Para pausar ou apagar: na mesma tela, desligue ou exclua a tarefa.
 - Depois de 09/05/2027 ela não altera mais nada.
 

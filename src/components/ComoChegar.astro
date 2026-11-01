@@ -21,12 +21,13 @@ const blocos = (cid: (typeof cc.cidades)[number]) => {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 19h19M3 13.5l4.5 1.5 4-3.5L6 6l2-.8 8 4.6 3.6-1.5a1.6 1.6 0 0 1 1.2 3l-14 5.7L3 13.5z"></path></svg>
     <strong>{cc.prazo}</strong>
   </p>
+  <p class="voos-atualizado">Última atualização dos voos: <strong>{cc.atualizadoEm}</strong></p>
 
   <div class="voos">
     {cc.cidades.map((cid) => (
       <article class="voo-cidade">
         <h3><span class="voo-cod">{cid.aeroporto}</span> {cid.cidade} <span class="voo-seta" aria-hidden="true">→</span> <span class="voo-cod">PUJ</span><span class="so-leitor"> Punta Cana</span></h3>
-        <p class="voo-pesquisa">Pesquisa de {cid.pesquisa}</p>
+        <p class="voo-pesquisa">Pesquisa de {cid.pesquisa}{cid.fonte && ` · ${cid.fonte}`}</p>
         {cid.nota && <p class="voo-nota">{cid.nota}</p>}
         {blocos(cid).map(({ rotulo, voo, destaque }) => (
           <div class:list={['voo-opcao', { destaque, volta: rotulo === 'Volta' }]}>

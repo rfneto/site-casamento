@@ -361,6 +361,10 @@ export const casamento = {
   //    volta 13/05 (Swiss/Edelweiss € 924, conexão de 2h10 em Zurique) e volta
   //    Punta Cana → Milão em 13/05 (nenhum Swiss/Edelweiss nesse dia; sem
   //    EUA/Canadá só via Frankfurt). Condor não detalhada no Google.
+  //    Números de voo (Google Flights): ida LX1613 MXP 10h35 → ZRH 11h35 +
+  //    WK34 ZRH 13h45 → PUJ 17h25 (WK34 também opera sáb 08 e seg 10/05);
+  //    volta em 13/05 sem EUA/Canadá: Discover 4Y3 PUJ 19h55 → FRA 11h10 +
+  //    EN250 FRA 12h35 → MXP 13h55 (€ 1.019 só a volta).
   //
   // Cada cidade tem: pesquisa (data), recomendado (em destaque; chega até o
   // meio-dia de 10/05), alternativas, volta e avisos.
@@ -466,8 +470,8 @@ export const casamento = {
             companhia: 'Swiss / Edelweiss',
             rota: 'Via Zurique · mais barata e chega no domingo',
             trechos: [
-              'Dom 09/05 · Milão 10h35 → Zurique → Punta Cana 17h25 (conexão de 2h10 em Zurique; dá tempo com bilhete único: há controle de passaporte e o recomendado é 60 a 90 minutos)',
-              'Volta em 13/05: não há voo Swiss/Edelweiss saindo de Punta Cana nesse dia. A volta desse bilhete é por outra rota do grupo Lufthansa (por exemplo, via Frankfurt: Punta Cana 19h55 → Milão 13h55 de sexta). Confira a volta no site da Swiss antes de comprar.',
+              'Dom 09/05 · Milão 10h35 → Zurique 11h35 (LX1613) → Punta Cana 17h25 (WK34). Conexão de 2h10 em Zurique: dá tempo com bilhete único (há controle de passaporte; o recomendado é 60 a 90 minutos).',
+              'Volta em 13/05: não há voo Swiss/Edelweiss saindo de Punta Cana nesse dia. A volta sem EUA/Canadá é pelo grupo Lufthansa via Frankfurt: Discover 4Y3 Punta Cana 19h55 → Frankfurt 11h10 de sexta → Milão 13h55. Confira no site da Swiss se a volta do bilhete é essa antes de comprar.',
             ],
             duracao: 'cerca de 12h50, com a conexão',
             preco: 'Cerca de € 920 ida e volta (volta em 13/05)',
